@@ -1426,6 +1426,10 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 4096
   bodyAnimator: {fileID: 405566260}
+  hitForce:
+  - 0.1
+  - 0.2
+  - 0.3
 --- !u!143 &1032903425
 CharacterController:
   m_ObjectHideFlags: 0
@@ -1949,6 +1953,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1460145071}
   - component: {fileID: 1460145070}
+  - component: {fileID: 1460145072}
   m_Layer: 0
   m_Name: CameraMount
   m_TagString: Untagged
@@ -1985,6 +1990,20 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 7
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1460145072
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1460145069}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9efe26825c6d3b24aac340ea97076054, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  shakeDecay: 0.02
+  intensity: 0.3
 --- !u!1 &1498746750
 GameObject:
   m_ObjectHideFlags: 0
