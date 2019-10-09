@@ -1,34 +1,4 @@
-﻿/*
- * Copyright (c) 2018 Razeware LLC
- * 
- * Permission is hereby granted, free of charge, to any person obtaining a copy
- * of this software and associated documentation files (the "Software"), to deal
- * in the Software without restriction, including without limitation the rights
- * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
- * copies of the Software, and to permit persons to whom the Software is
- * furnished to do so, subject to the following conditions:
- * 
- * The above copyright notice and this permission notice shall be included in
- * all copies or substantial portions of the Software.
- *
- * Notwithstanding the foregoing, you may not use, copy, modify, merge, publish, 
- * distribute, sublicense, create a derivative work, and/or sell copies of the 
- * Software in any work that is designed, intended, or marketed for pedagogical or 
- * instructional purposes related to programming, coding, application development, 
- * or information technology.  Permission for such use, copying, modification,
- * merger, publication, distribution, sublicensing, creation of derivative works, 
- * or sale is expressly withheld.
- *    
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
- * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
- * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
- * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
- * THE SOFTWARE.
- */
-
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -37,11 +7,17 @@ public class GameManager : MonoBehaviour {
     public GameObject player;
     public GameObject[] spawnPoints;
     public GameObject alien;
+    public GameObject upgradePrefab;
     public int maxAliensOnScreen;
     public int totalAliens;
     public float minSpawnTime;
     public float maxSpawnTime;
     public int aliensPerSpawn;
+    public Gun gun;
+    public float upgradeMaxTimeSpawn = 7.5f;
+    private bool spawnedUpgrade = false;
+    private float actualUpgradeTime = 0;
+    private float currentUpgradeTime = 0;
 
     private int aliensOnScreen = 0;
     private float generatedSpawnTime = 0;
@@ -50,12 +26,33 @@ public class GameManager : MonoBehaviour {
     // Use this for initialization
     void Start ()
     {
-		
-	}
+        actualUpgradeTime = Random.Range(upgradeMaxTimeSpawn - 3.0f, 
+            upgradeMaxTimeSpawn);
+        actualUpgradeTime = Mathf.Abs(actualUpgradeTime);
+    }
 	
 	// Update is called once per frame
 	void Update ()
     {
+        currentUpgradeTime += Time.deltaTime;
+        if (currentUpgradeTime > actualUpgradeTime)
+        {
+            // 1
+            if (!spawnedUpgrade)
+            {
+                // 2
+                int randomNumber = Random.Range(0, spawnPoints.Length - 1);
+                GameObject spawnLocation = spawnPoints[randomNumber];
+                // 3
+                GameObject upgrade = Instantiate(upgradePrefab) as GameObject;
+                Upgrade upgradeScript = upgrade.GetComponent<Upgrade>();
+                upgradeScript.gun = gun;
+                upgrade.transform.position = spawnLocation.transform.position;
+                // 4
+                spawnedUpgrade = true;
+                SoundManager.Instance.PlayOneShot(SoundManager.Instance.powerUpAppear);
+            }
+        }
         currentSpawnTime += Time.deltaTime;
         if (currentSpawnTime > generatedSpawnTime)
         {
